@@ -104,7 +104,7 @@ void ComputeGnn(Graph& graph, Weight& weight) {
         galois::iterate(graph),
         [&](const GNode& src) {
           LNode& srcData = graph.getData(src);
-          GNNTy newVal;
+          GNNTy newVal = {0, 0, 0, 0};
           for (auto nbr : graph.edges(src)) {
             GNode dst      = graph.getEdgeDst(nbr);
             LNode& dstData = graph.getData(dst);
@@ -116,6 +116,7 @@ void ComputeGnn(Graph& graph, Weight& weight) {
         galois::steal(), galois::chunk_size<CHUNK_SIZE>(), galois::no_stats(),
         galois::loopname("ForwardPass"));
     iter++;
+    std::cout << "Iteration: " << iter << "\n";
     if (iter >= maxIterations) {
       break;
     }
