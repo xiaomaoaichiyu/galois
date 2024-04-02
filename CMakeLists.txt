@@ -154,7 +154,9 @@ endif()
 
 find_package(Boost 1.58.0 REQUIRED COMPONENTS serialization iostreams)
 
-find_package(LLVM REQUIRED CONFIG)
+set(LLVM_DIR /opt/homebrew/opt/llvm/lib/cmake/llvm)
+
+find_package(LLVM REQUIRED REQUIRED)
 if("${LLVM_PACKAGE_VERSION}" VERSION_LESS "7")
   message(FATAL_ERROR "LLVM 7 or greater is required.")
 endif()

@@ -175,6 +175,7 @@ void computePRResidual(Graph& graph, DeltaArray& delta,
     std::cout << "iteration: " << iterations << "\n";
 #endif
     iterations++;
+    std::cout << "Pr iteration: " << iterations << std::endl;
     if (iterations >= maxIterations || !accum.reduce()) {
       break;
     }

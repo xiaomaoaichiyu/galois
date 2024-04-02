@@ -59,7 +59,7 @@ static cll::opt<Exec> execution(
     "exec", cll::desc("Distributed Execution Model (default value Async):"),
     cll::values(clEnumVal(Sync, "Bulk-synchronous Parallel (BSP)"),
                 clEnumVal(Async, "Bulk-asynchronous Parallel (BASP)")),
-    cll::init(Async));
+    cll::init(Sync));
 
 /******************************************************************************/
 /* Graph structure declarations + other initialization */
@@ -286,6 +286,7 @@ struct PageRank {
           (unsigned long)_graph.sizeEdges());
 
       ++_num_iterations;
+      std::cout << "PR iteration " << _num_iterations << "\n";
     } while ((async || (_num_iterations < maxIterations)) &&
              dga.reduce(syncSubstrate->get_run_identifier()));
 
@@ -479,7 +480,7 @@ constexpr static const char* const name = "PageRank - Compiler Generated "
                                           "Distributed Heterogeneous";
 constexpr static const char* const desc = "PageRank Residual Pull version on "
                                           "Distributed Galois.";
-constexpr static const char* const url = nullptr;
+constexpr static const char* const url  = nullptr;
 
 int main(int argc, char** argv) {
   galois::DistMemSys G;
