@@ -11,9 +11,6 @@
 #include <limits>
 #include <vector>
 
-enum { CPU };
-int personality = CPU;
-
 constexpr static const char* const REGION_NAME = "GNN";
 
 /******************************************************************************/
@@ -90,7 +87,7 @@ std::unique_ptr<galois::graphs::GluonSubstrate<Graph>> syncSubstrate;
 /******************************************************************************/
 
 float rand_float() {
-  return static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
+  return static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2 -1;
 }
 
 /* (Re)initialize all fields to 0 except for residual which needs to be 0.15
@@ -154,6 +151,7 @@ struct InitializeGraph {
       GNode dst   = graph->getEdgeDst(nbr);
       auto& ddata = graph->getData(dst);
       galois::atomicAdd(ddata.nout, (uint32_t)1);
+      bitset_nout.set(dst);
     }
   }
 };
@@ -269,6 +267,8 @@ int main(int argc, char** argv) {
 
   std::tie(hg, syncSubstrate) =
       distGraphInitialization<NodeData, void, false>();
+
+  bitset_nout.resize(hg->size());
 
   galois::gPrint("[", net.ID, "] InitializeGraph::go called\n");
 
